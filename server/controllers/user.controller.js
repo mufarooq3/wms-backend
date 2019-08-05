@@ -1,10 +1,8 @@
 const bcrypt = require('bcrypt');
-const Joi = require('joi');
 const sql = require('../config/mysql');
 const nodemailer = require('nodemailer');
 const authCtrl = require('./auth.controller');
 const apiCtrl = require('./api.controller.js');
-var xml2js = require('xml2js');
 
 
 
