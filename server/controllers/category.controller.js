@@ -4,6 +4,7 @@ const apiCtrl = require('./api.controller.js');
 
 module.exports = {
   create,
+  update,
   deleteCategory,
   get,
   list,
@@ -11,22 +12,32 @@ module.exports = {
 
 function create(req, res) {
   console.log(req.body);
-  const category_id = req.body.category_id;
   const name = req.body.name;
-  const price = req.body.price;
-  const serving = req.body.serving;
-  const description= req.body.description;
   const image= req.body.image;
-  const query = `insert into dim_categories (name, description, image) 
-  values ('${name}', '${description}', '${image}')`;
+  const query = `insert into dim_categories (name, image) 
+  values ('${name}', '${image}')`;
+  sql.query(query, (err, data) => {
+      if(err) return apiCtrl.apiError(res, err);
+      // console.log(data);
+      apiCtrl.apiSuccess(res, "Category Updated successfully!");
+
+  });
+}
+
+function update(req, res) {
+  console.log(req.body);
+  const id = req.body.id;
+  const name = req.body.name;
+  const image= req.body.image;
+  const query = `update dim_categories set name = '${name}', image='${image}' where id = ${id})`;
   sql.query(query, (err, data) => {
       if(err) return apiCtrl.apiError(res, err);
       // console.log(data);
       apiCtrl.apiSuccess(res, "Category Created successfully!");
 
   });
-  
 }
+
 
 function deleteCategory(req, res){
   let body = req.query;

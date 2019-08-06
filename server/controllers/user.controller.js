@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
   create,
+  update,
   list,
   get,
   deleteUser,
@@ -24,25 +25,39 @@ module.exports = {
 }
 
 function create(req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   const username = req.body.userName;
   const password = bcrypt.hashSync(req.body.password, 10);
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const contact = req.body.contact;
-  const description = req.body.description;
+  const name = req.body.name;
   const role= req.body.role;
-  const city = req.body.city;
-  const country = req.body.country;
-  const query = `insert into users (username, password, firstName, lastName, contact, description, role, city, country) 
-  values ('${username}','${password}', '${firstName}', '${lastName}', '${contact}', '${description}', '${role}', '${city}', '${country}')`;
+  const query = `insert into users (username, password, name, role) 
+  values ('${username}','${password}', '${name}', '${role}')`;
   sql.query(query, (err, data) => {
       if(err) return apiCtrl.apiError(res, err);
       // console.log(data);
       apiCtrl.apiSuccess(res, "User Created successfully!");
 
   });
-  
+}
+
+function update(req, res) {
+  // console.log(req.body);
+  const username = req.body.userName;
+  let password = null;
+  const name = req.body.name;
+  const role= req.body.role;
+  let query = ``;
+  if(req.body.password){
+    password = bcrypt.hashSync(req.body.password, 10);
+    query = `update dim_categories set username='${username}', password='${password}', name='${name}', role='${role}' where id = ${id})`;
+  } else {
+    query = `update dim_categories set username='${username}', name='${name}', role='${role}' where id = ${id})`;
+  }
+  sql.query(query, (err, data) => {
+      if(err) return apiCtrl.apiError(res, err);
+      // console.log(data);
+      apiCtrl.apiSuccess(res, "User Updated successfully!");
+  });
 }
 
 function deleteUser(req, res){
@@ -71,7 +86,7 @@ function get(req, res) {
 
 function list(req, res) {
   let body = req.query,
-    limit = body.limit ? body.limit : 10,
+    limit = body.limit ? body.limit : 50,
     offset = body.offset ? (body.offset * limit) : 0;
 
   const query = `select * from users limit ${limit} offset ${offset}`;

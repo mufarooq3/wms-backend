@@ -4,6 +4,7 @@ const apiCtrl = require('./api.controller.js');
 
 module.exports = {
   create,
+  update,
   deleteItem,
   get,
   list,
@@ -15,17 +16,30 @@ function create(req, res) {
   const name = req.body.name;
   const price = req.body.price;
   const serving = req.body.serving;
-  const description= req.body.description;
   const image= req.body.image;
-  const query = `insert into dim_items (category_id, name, price, serving, description, image) 
-  values ('${category_id}','${name}', '${price}', '${serving}', '${description}', '${image}')`;
+  const query = `insert into dim_items (category_id, name, price, serving, image) 
+  values ('${category_id}','${name}', '${price}', '${serving}', '${image}')`;
   sql.query(query, (err, data) => {
       if(err) return apiCtrl.apiError(res, err);
       // console.log(data);
       apiCtrl.apiSuccess(res, "Item Created successfully!");
+  });
+}
+
+function update(req, res) {
+  console.log(req.body);
+  const id = req.body.id;
+  const name = req.body.name;
+  const price = req.body.price;
+  const serving = req.body.serving;
+  const image= req.body.image;
+  const query = `update dim_items set name = '${name}', price = '${price}', serving = '${serving}', image='${image}' where id = ${id})`;
+  sql.query(query, (err, data) => {
+      if(err) return apiCtrl.apiError(res, err);
+      // console.log(data);
+      apiCtrl.apiSuccess(res, "Item Updated successfully!");
 
   });
-  
 }
 
 function deleteItem(req, res){
